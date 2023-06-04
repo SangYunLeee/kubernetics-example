@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-ingress
+  labels:
+    app: simple-app
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "localhost"
+      http:
+        paths:
+        # - path: /test
+        - path: /test
+          pathType: Prefix
+          backend:
+            service:
+              name: simple-app-service
+              port:
+                number: 8055
+    - host: "localhost"
+      http:
+        paths:
+        # - path: /test
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: simple-app-service
+              port:
+                number: 8055
+    - host: "localhost"
+      http:
+        paths:
+        # - path: /test
+        - path: /error
+          pathType: Prefix
+          backend:
+            service:
+              name: simple-app-service
+              port:
+                number: 8055
+  # defaultBackend:
+  #   service:
+  #     name: simple-app-deployment
+  #     port:
+  #       number: 80
