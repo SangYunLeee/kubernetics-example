@@ -1,0 +1,86 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-pv-volume-0
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  claimRef:
+    name: myclaim-mysts-0
+    namespace: devops-tools
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  local:
+    path: /mnt/common
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - sub
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim-mysts-0
+  namespace: devops-tools
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-pv-volume-1
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  claimRef:
+    name: myclaim-mysts-1
+    namespace: devops-tools
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  local:
+    path: /mnt/common
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - sub2
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: myclaim-mysts-1
+  namespace: devops-tools
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
